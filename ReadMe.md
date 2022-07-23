@@ -34,6 +34,11 @@ Pour vider les dossier LOGS et DRAWS, ainsi que les fichiers indésirables (.o),
 make mrproper
 ```
 
+Pour créer le fichier qui permettra de tester si l'API fonctionne bien, il est possible de créer l'exécutable du client avec:
+```
+make client
+```
+
 ## Comment l'utiliser
 
 ### Fichier Config
@@ -59,6 +64,12 @@ Unis fois que le programme est compilé et prêt, il suffit de taper
 ```
 
 Feature: Taper `getLastDraw` lorsque le programme est lancé permet d'affiche le dernier tirage.
+
+Pour démarrer le client, il suffit de lancer un second terminal, de se replacer à la racine du projet et de taper:
+```
+./client <timecode>
+```
+Attention, le timecode doit être rentré en secondes.
 
 # Détails du code
 
