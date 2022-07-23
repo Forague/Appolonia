@@ -19,3 +19,9 @@ Problèmes hors code:
     Utilisation d'un WSS (plus pratique je pense, mais à vérifier)
 23/07:
     Les threads fonctionnent bien + rajout d'une feature permettant d'avoir accès au dernier tirage en tapant getLastDraw dans la ligne de commande
+
+TODO:
+    Rajouter des méthodes sur cDraw pour renvoyer getDraw au format Json, et lire les logs.
+    Rajoutes des méthodes sur cDraws pour renvoyer getDraw_uid et getDraw_log
+    Rajouter des commandes coté client (getDraw_uid(uid), getDraw_log(uid))
+    -> Modifier le code afin qu'il prenne aussi en compte les fichiers dans ./DRAWS et ./LOGS et pas seulement ceux en cours.

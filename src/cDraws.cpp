@@ -24,16 +24,6 @@ cDraws::~cDraws(){this->run = false;}; // Destructeur.
 void cDraws::add_draw(cDraw tirage){
     mtx.lock();
     this->draws.push_back(tirage);
-    this->DRAW_N1 = tirage.get_tirage(1);
-    this->DRAW_N2 = tirage.get_tirage(2);
-    this->DRAW_N3 = tirage.get_tirage(3);
-    this->DRAW_N4 = tirage.get_tirage(4);
-    this->DRAW_N5 = tirage.get_tirage(5);
-    this->DRAW_N6 = tirage.get_tirage(6);
-    this->DRAW_N7 = tirage.get_tirage(7);
-    this->DRAW_N8 = tirage.get_tirage(8);
-    this->DRAW_N9 = tirage.get_tirage(9);
-    this->DRAW_UID = to_string(tirage.get_id());
     mtx.unlock();
 };
 
@@ -177,9 +167,15 @@ void cDraws::session_ws(tcp::socket socket){
                 if (_p_dt == "getLastDraw"){
                     cDraw tirage = this->getLastDraw("");
                     message = tirage.get_tirages();
-                } else if (regex_match(_p_dt, regex("^[0-9]+$"))){
+                } else if (regex_match(_p_dt, regex("^getLastDraw [0-9]+$"))){
                     cDraw tirage = this->getLastDraw(_p_dt);
                     message = tirage.get_tirages();
+                } else if (regex_match(_p_dt, regex("^getDraw_uid [0-9]+$"))){
+                    cDraw tirage = this->getDraw_uid(_p_dt);
+                    message = tirage.get_tirages();
+                } else if (regex_match(_p_dt, regex("^getDraw_log [0-9]+$"))){
+                    cDraw tirage = this->getDraw_uid(_p_dt);
+                    message = tirage.getDraw_log();
                 }
             } catch (exception& e){
                 message = e.what();
@@ -224,3 +220,10 @@ string cDraws::transform(int day){
             return "Erreur";
     }
 };
+
+cDraw cDraws::getDraw_uid(string _p_id) noexcept(false) {
+    // open file ./DRAWS/tirage_p_id.json
+    cDraw tirage;
+    tirage.load_tirage(_p_id);
+    return tirage; 
+}

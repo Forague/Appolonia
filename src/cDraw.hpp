@@ -52,6 +52,8 @@ class cDraw
         time_t get_utc();
         struct tm get_localday();
         std::string get_tirages();
+        std::string getDraw_log();
+        void load_tirage(std::string filename);
         // TODO: add &operator= to Tirage 
 };
 

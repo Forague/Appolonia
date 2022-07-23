@@ -100,13 +100,78 @@ struct tm cDraw::get_localday(){
     return to_tm(this->localday);
 };
 
-string cDraw::get_tirages()
+string cDraw::get_tirages() // format Json
 {
-    string temp = "";
+    string temp = "{UID: " + to_string(this->id) + ", tirage: [";
     for (int i = 0; i < 9; ++i)
     {
         temp += to_string(this->tirages[i]) + " ";
     }
+    temp = "], date: " + to_simple_string(this->localday) + ", date_UTC: " + to_string(this->utc->tm_year+1900) + '-' + to_string(this->utc->tm_mon+1) + '-' + to_string(this->utc->tm_mday) + ' ' + to_string(this->utc->tm_hour) + ':' + to_string(this->utc->tm_min) + ':' + to_string(this->utc->tm_sec) + "}";
     return temp;
 };
 
+string cDraw::getDraw_log(){
+    // read the contenct of ./LOGS/tirage_" + to_string(this-> id) + ".log"
+    string temp = "";
+    ifstream tirage_file("./LOGS/tirage_" + to_string(this->id) + ".log");
+    if (tirage_file.is_open())
+    {
+        string line;
+        while (getline(tirage_file, line))
+        {
+            temp += line + "\n";
+        }
+        tirage_file.close();
+    }
+    return temp;
+}
+
+void cDraw::load_tirage(string filename)
+{
+    ifstream configuration("./DRAWS/tirage_" + filename + ".json", ifstream::binary);
+    if (configuration.is_open())
+    {
+        stringstream buffer;
+        buffer << configuration.rdbuf();
+        string content = buffer.str();
+        Json::Reader reader;
+        Json::Value root;
+        reader.parse(content, root);
+        this->id = root["UID"].asInt();
+        for (int i = 0; i < 9; ++i)
+        {
+            this->tirages[i] = root["tirage"][i].asInt();
+        }
+        this->localday = boost::gregorian::from_string(root["date"].asString());
+        string UTC_format = root["date_UTC"].asString();
+        stringstream ss(UTC_format);
+        string token;
+        int i = 0;
+        while (getline(ss, token, ' '))
+        {
+            this->utc->tm_year = stoi(token) - 1900;
+            ++i;
+            getline(ss, token, '-');
+            this->utc->tm_mon = stoi(token) - 1;
+            ++i;
+            getline(ss, token, '-');
+            this->utc->tm_mday = stoi(token);
+            ++i;
+            getline(ss, token, ' ');
+            this->utc->tm_hour = stoi(token);
+            ++i;
+            getline(ss, token, ':');
+            this->utc->tm_min = stoi(token);
+            ++i;
+            getline(ss, token, ':');
+            this->utc->tm_sec = stoi(token);
+            ++i;
+        }
+        configuration.close();
+    }
+    else
+    {
+        cout << "Impossible d'ouvrir le fichier ./DRAWS/tirage_" << filename << ".json" << endl;
+    }
+};

@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     try
     {
         // Check command line arguments.
-        if(argc >= 3)
+        if(argc == 1 && argc > 3)
         {
             std::cerr <<
                 "Usage: ./client [message]>\n" <<
@@ -29,13 +29,24 @@ int main(int argc, char** argv)
                 "    ./client \"1664455815\"\n";
             return EXIT_FAILURE;
         }
+
+        if (argc == 2 and argv[1] == "-h")
+        {
+            std::cout << "Usage: ./client [option] [param]>\n" <<
+                "Option : getLastDraw ([temps en seconde], optionnel)\n" <<
+                "         getDraw_uid [uid du tirage]\n" <<
+                "         getDraw_log [uid du tirage]\n" <<
+                << "Example:\n" <<
+                "    ./client getDraw_uid \"1664455815\"\n";
+            return EXIT_SUCCESS;
+        }
         std::string host = "127.0.0.1";
         auto const  port = 1664;
         auto const  text;
-        if (argc == 1){
+        if (argc == 3){
+            text = argv[1] + " " + argv[2];
+        } else if (argc == 2){
             text = argv[1];
-        } else {
-            text = "getLastDraw";
         }
         
 

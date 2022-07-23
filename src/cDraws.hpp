@@ -10,6 +10,8 @@
 #include <boost/asio/ssl/stream.hpp>
 #include <boost/beast/http.hpp>
 
+#include <boost/filesystem.hpp>
+
 #include <stdexcept> // pour la gestion des erreurs si aucun tirage n'a été fait.
 #include <thread>
 #include <list>
@@ -38,12 +40,12 @@ class cDraws{
         ~cDraws(); // destructeur
 
         // constantes 
-        std::string DRAW_UID;
         std::string DRAW_DTH; // Pas compris
         bool DRAW_IS_CLOSED;
 
         //méthodes 
         cDraw getLastDraw(std::string _p_dt) noexcept(false); // On récupère le dernier tirage avec la date _p_dt, TODO: changer le nom des classes.
+        cDraw getDraw_uid(std::string _p_id) noexcept(false); // On récupère le tirage avec l'id _p_id, TODO: changer le nom des classes.
 };
 
 
