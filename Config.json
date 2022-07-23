@@ -1,0 +1,11 @@
+{
+    "Interval": 30,
+    "Lundi": 1,
+    "Mardi": 1,
+    "Mercredi": 1,
+    "Jeudi": 1,
+    "Vendredi": 1,
+    "Samedi": 1,
+    "Dimanche": 1,
+    "Schedule" : "00h00-23h59"
+}

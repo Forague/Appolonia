@@ -1,0 +1,21 @@
+Problèmes hors code:
+    undefined reference to `boost::log::v2s_mt_posix::core::get()` -> résolu avec -pthread, -lboost_log et -lboost_thread 
+    undefined reference to `boost::gregorian::greg_month::as_long_string() const`  -> résolu avec -lboost_date_time
+    mettre -DBOOST_LOG_DYN_LINK dans chaque compilation (jsp pourquoi mais après ca marche, apparement ca dépend de la version)
+    -lcrypto permet de faire fonctionner le ssl
+
+
+21/07 Problèmes:
+    Problèmes pour le log
+    L'enregistrement dans ./DRAWS/*.json est opérationnel
+    Le tirage est bon
+    Il faut encore utiliser BOOST pour l'api cliente
+22/07:
+    le fichier log est bien créé mais pas de contenu à l'intérieur.
+    log est bien créé au bon endroit + tout est bien enregisté dans ./LOGS/ au format .log.
+    Création d'une nouvelle classe: cDraws -> contient tout.
+    Tout fonctionne bien (différents thread)
+    Ne reste que le lancement de l'API qui va servir de serveur
+    Utilisation d'un WSS (plus pratique je pense, mais à vérifier)
+23/07:
+    Les threads fonctionnent bien + rajout d'une feature permettant d'avoir accès au dernier tirage en tapant getLastDraw dans la ligne de commande
