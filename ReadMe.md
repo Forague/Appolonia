@@ -40,15 +40,15 @@ make mrproper
 
 Le fichier config contient l'ensemble des paramètres initiaux du code.
 Il est possible de paramétrer les jours où le code fonctionne, ainsi que les horaires et l'intervalle entre deux séries de tirage.
-    `Interval` -> Le temps de l'intervalle en secondes
-    `Lundi` -> 
-        0 le programme ne fonctionne pas le lundi
-        1 le programme fonctionne le lundi
-    ...
-    `Dimanche` ->
-        0 le programme ne fonctionne pas le dimanche
-        1 le programme fonctionne le dimanche
-    `Schedule` -> Le planning de lancement (format "00h00 - 23h59". différents formats pas encore implémenté)
+- `Interval` -> Le temps de l'intervalle en secondes
+- `Lundi` -> 
+ - 0 le programme ne fonctionne pas le lundi
+ - 1 le programme fonctionne le lundi
+- ...
+- `Dimanche` ->
+ - 0 le programme ne fonctionne pas le dimanche
+ - 1 le programme fonctionne le dimanche
+- `Schedule` -> Le planning de lancement (format "00h00 - 23h59". différents formats pas encore implémenté)
 
 
 ### Utilisation
@@ -58,17 +58,16 @@ Unis fois que le programme est compilé et prêt, il suffit de taper
 ./main
 ```
 
-Feature:
-    Taper `getLastDraw` lorsque le programme est lancé permet d'affiche le dernier tirage.
+Feature: Taper `getLastDraw` lorsque le programme est lancé permet d'affiche le dernier tirage.
 
 # Détails du code
 
 Terminologie:
-    - cDraw correspon à un seul tirage.
-    - cDraws correspong à l'ensemble des tirages.
+- cDraw correspon à un seul tirage.
+- cDraws correspong à l'ensemble des tirages.
 
 Dès que l'objet cDraws est créé, l'application se lance. Deux threads sont aussi lancés en parallèles lors de la construction:
-    - Le premier s'occupe de faire les tirages toutes les X secondes.
-    - Le second fait tourner l'API qui tourne en fond.
+- Le premier s'occupe de faire les tirages toutes les X secondes.
+- Le second fait tourner l'API qui tourne en fond.
 
 L'API écoute passivement les messages envoyés et répond à ces derniers.

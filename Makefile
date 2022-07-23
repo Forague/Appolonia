@@ -23,9 +23,11 @@ client:
 clean:
 	rm src/*.o
 	rm -f main
+	rm -f client
 
 mrproper:
 	rm -f src/*.o
 	rm -f main
+	rm -f client
 	rm -f ./LOGS/*.log
 	rm -f ./DRAWS/*.json
