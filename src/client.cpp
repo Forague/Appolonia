@@ -20,17 +20,24 @@ int main(int argc, char** argv)
     try
     {
         // Check command line arguments.
-        if(argc != 4)
+        if(argc >= 3)
         {
             std::cerr <<
-                "Usage: ./client <host> <port> <text>\n" <<
-                "Example:\n" <<
-                "    ./client echo.websocket.org 80 \"Hello, world!\"\n";
+                "Usage: ./client [message]>\n" <<
+                "Attention, le temps doit être rentré en secondes.\n"
+                << "Example:\n" <<
+                "    ./client \"1664455815\"\n";
             return EXIT_FAILURE;
         }
-        std::string host = argv[1];
-        auto const  port = argv[2];
-        auto const  text = argv[3];
+        std::string host = "127.0.0.1";
+        auto const  port = 1664;
+        auto const  text;
+        if (argc == 1){
+            text = argv[1];
+        } else {
+            text = "getLastDraw";
+        }
+        
 
         // The io_context is required for all I/O
         net::io_context ioc;
@@ -56,7 +63,7 @@ int main(int argc, char** argv)
             {
                 req.set(http::field::user_agent,
                     std::string(BOOST_BEAST_VERSION_STRING) +
-                        " websocket-client-coro");
+                        " client");
             }));
 
         // Perform the websocket handshake
