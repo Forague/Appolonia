@@ -42,12 +42,12 @@ Le fichier config contient l'ensemble des paramètres initiaux du code.
 Il est possible de paramétrer les jours où le code fonctionne, ainsi que les horaires et l'intervalle entre deux séries de tirage.
 - `Interval` -> Le temps de l'intervalle en secondes
 - `Lundi` -> 
- - 0 le programme ne fonctionne pas le lundi
- - 1 le programme fonctionne le lundi
+    - 0 le programme ne fonctionne pas le lundi
+    - 1 le programme fonctionne le lundi
 - ...
 - `Dimanche` ->
- - 0 le programme ne fonctionne pas le dimanche
- - 1 le programme fonctionne le dimanche
+    - 0 le programme ne fonctionne pas le dimanche
+     - 1 le programme fonctionne le dimanche
 - `Schedule` -> Le planning de lancement (format "00h00 - 23h59". différents formats pas encore implémenté)
 
 
