@@ -27,11 +27,12 @@ void cDraws::add_draw(cDraw tirage){
     mtx.unlock();
 };
 
-cDraw cDraws::getLastDraw(string _p_dt = "") noexcept(false){
-    // convert string _p_dt to 
-    if (_p_dt == ""){
+cDraw cDraws::getLastDraw(string _p_dt) noexcept(false){
+    
+    if (_p_dt == ""){ // Si aucune date n'est passée en paramètre, on prend la date actuelle
         time_t now = time(0);
         _p_dt = to_string(now);
+        cout << _p_dt << endl;
     }
     long int _p_dt_long = stol(_p_dt);
     time_t t = time_t(_p_dt_long);
@@ -77,7 +78,6 @@ void cDraws::runDraws(){
     int hour_fin = stoi(fin.substr(0, 2)); // Accède à la valeur heure dans le fichier json. (format string)
     int min_fin = stoi(fin.substr(3, 2)); // Accède à la valeur minute dans le fichier json. (format string)
 
-
     // Création d'un objet cDraw
     while (this->run){
         
@@ -87,14 +87,21 @@ void cDraws::runDraws(){
         t = localtime(&now);
 
         string day = transform(t -> tm_wday);
-        // check if t->tm_hour is in hour_debut and hour_fin
 
+        bool available_today = config[day].asInt();
 
-        this->DRAW_IS_CLOSED = config[day] == 1 && (t->tm_hour > hour_debut || (t->tm_hour == hour_debut && t->tm_hour >= min_debut)) && (t->tm_hour < hour_fin || (t->tm_hour == hour_fin && t->tm_min <= min_fin)); // Vérifier si le tirage est ouvert ou pas.
+        this->DRAW_IS_CLOSED = (t->tm_hour > hour_debut || (t->tm_hour == hour_debut && t->tm_min >= min_debut)) && (t->tm_hour < hour_fin || (t->tm_hour == hour_fin && t->tm_min <= min_fin));
+
+        cout << "DRAW_IS_CLOSED (for time) " << this->DRAW_IS_CLOSED;
+
+        this->DRAW_IS_CLOSED = this->DRAW_IS_CLOSED && available_today;
+
+        cout << "////" << this->DRAW_IS_CLOSED << endl;
+
         if (this->DRAW_IS_CLOSED){ // Si le tirage est ouvert, on lance le tirage.
             cDraw tirage_actuel;
             tirage_actuel.tirage_aleatoire();
-            // tirage_actuel.afficher_tirage();
+            tirage_actuel.afficher_tirage();
             tirage_actuel.save_tirage();
             this->add_draw(tirage_actuel);
             sleep(interval);
@@ -162,6 +169,8 @@ void cDraws::session_ws(tcp::socket socket){
 
             // Echo the message back
             string _p_dt = beast::buffers_to_string(buffer.data());
+            buffer.clear();
+            net::streambuf buf;
             string message = "Error";
             try {
                 if (_p_dt == "getLastDraw"){
@@ -183,9 +192,10 @@ void cDraws::session_ws(tcp::socket socket){
             
             ws.text(ws.got_text());
             // transfer the message to the buffer
-            buffer.clear();
-            beast::ostream(buffer) << message;
-            ws.write(buffer.data());
+            net::transfer_at_least(2048*1024);
+            
+            beast::ostream(buf) << message;
+            ws.write(buf.data());
         }
     }
     catch(beast::system_error const& se)
@@ -214,7 +224,7 @@ string cDraws::transform(int day){
             return "Vendredi";
         case 6:
             return "Samedi";
-        case 7:
+        case 0:
             return "Dimanche";
         default:
             return "Erreur";

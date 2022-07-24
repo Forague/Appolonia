@@ -18,7 +18,7 @@ src/cDraw.o: src/cDraw.cpp src/cDraw.hpp
 	mv cDraw.o src/cDraw.o
 
 client: 
-	$(CC) src/client.cpp $(CFLAGS) -DBOOST_LOG_DYN_LINK -lcrypto -lpthread -o client
+	$(CC) src/client.cpp $(CFLAGS) -lcrypto -lpthread -o client
 
 clean:
 	rm src/*.o

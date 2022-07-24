@@ -8,6 +8,8 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
@@ -22,31 +24,41 @@ int main(int argc, char** argv)
         // Check command line arguments.
         if(argc == 1 && argc > 3)
         {
-            std::cerr <<
+            cerr <<
                 "Usage: ./client [message]>\n" <<
-                "Attention, le temps doit être rentré en secondes.\n"
-                << "Example:\n" <<
+                "Attention, le temps doit être rentré en secondes.\n" <<
+                "Example:\n" <<
                 "    ./client \"1664455815\"\n";
             return EXIT_FAILURE;
         }
 
         if (argc == 2 and argv[1] == "-h")
         {
-            std::cout << "Usage: ./client [option] [param]>\n" <<
+            cout << "Usage: ./client [option] [param]>\n" <<
                 "Option : getLastDraw ([temps en seconde], optionnel)\n" <<
                 "         getDraw_uid [uid du tirage]\n" <<
                 "         getDraw_log [uid du tirage]\n" <<
-                << "Example:\n" <<
+                "Example:\n" <<
                 "    ./client getDraw_uid \"1664455815\"\n";
             return EXIT_SUCCESS;
         }
-        std::string host = "127.0.0.1";
-        auto const  port = 1664;
-        auto const  text;
+
+        string host = "127.0.0.1";
+        auto const port = "1664";
+        string text;
         if (argc == 3){
-            text = argv[1] + " " + argv[2];
-        } else if (argc == 2){
-            text = argv[1];
+            text = argv[1] + string(" ") + argv[2];
+        } else if (argc == 2 && argv[1] != "getLastDraw"){
+            text = "getLastDraw";
+        } else {
+            // cout error
+            cout << "Usage: ./client [option] [param]>\n" <<
+                "Option : getLastDraw ([temps en seconde], optionnel)\n" <<
+                "         getDraw_uid [uid du tirage]\n" <<
+                "         getDraw_log [uid du tirage]\n" <<
+                "Example:\n" <<
+                "    ./client getDraw_uid \"1664455815\"\n";
+            return 1;
         }
         
 
@@ -66,14 +78,14 @@ int main(int argc, char** argv)
         // Update the host_ string. This will provide the value of the
         // Host HTTP header during the WebSocket handshake.
         // See https://tools.ietf.org/html/rfc7230#section-5.4
-        host += ':' + std::to_string(ep.port());
+        host += ':' + to_string(ep.port());
 
         // Set a decorator to change the User-Agent of the handshake
         ws.set_option(websocket::stream_base::decorator(
             [](websocket::request_type& req)
             {
                 req.set(http::field::user_agent,
-                    std::string(BOOST_BEAST_VERSION_STRING) +
+                    string(BOOST_BEAST_VERSION_STRING) +
                         " client");
             }));
 
@@ -81,10 +93,11 @@ int main(int argc, char** argv)
         ws.handshake(host, "/");
 
         // Send the message
-        ws.write(net::buffer(std::string(text)));
+        ws.write(net::buffer(string(text)));
 
         // This buffer will hold the incoming message
         beast::flat_buffer buffer;
+        net::transfer_at_least(2048*1024);
 
         // Read a message into our buffer
         ws.read(buffer);
@@ -95,11 +108,11 @@ int main(int argc, char** argv)
         // If we get here then the connection is closed gracefully
 
         // The make_printable() function helps print a ConstBufferSequence
-        std::cout << beast::make_printable(buffer.data()) << std::endl;
+        cout << beast::make_printable(buffer.data()) << endl;
     }
-    catch(std::exception const& e)
+    catch(exception const& e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+        cerr << "Error: " << e.what() << endl;
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

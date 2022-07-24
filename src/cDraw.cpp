@@ -46,12 +46,12 @@ void cDraw::tirage_aleatoire()
 
 void cDraw::afficher_tirage()
 {
-    cout << "Tirage " << this->id << ": ";
+    string temp = "Tirage " + to_string(this->id) + ": ";
     for (int numero : this->tirages)
     {
-        cout << numero << " ";
+       temp+= numero + " ";
     }
-    cout << endl;
+    cout << temp << endl;
 };
 
 void cDraw::save_tirage()
@@ -102,12 +102,13 @@ struct tm cDraw::get_localday(){
 
 string cDraw::get_tirages() // format Json
 {
-    string temp = "{UID: " + to_string(this->id) + ", tirage: [";
-    for (int i = 0; i < 9; ++i)
+    string date = to_simple_string(this->localday);
+    string temp = "{UID: " + to_string(this->id) + ", date:" + date + ", date_UTC: " + to_string(this->utc->tm_year+1900) + '-' + to_string(this->utc->tm_mon+1) + '-' + to_string(this->utc->tm_mday) + ' ' + to_string(this->utc->tm_hour) + ':' + to_string(this->utc->tm_min) + ':' + to_string(this->utc->tm_sec) + "tirage: [ " + to_string(this->tirages[0]);
+    for (int i = 1; i < 9; ++i)
     {
-        temp += to_string(this->tirages[i]) + " ";
+        temp += ", " + to_string(this->tirages[i]);
     }
-    temp = "], date: " + to_simple_string(this->localday) + ", date_UTC: " + to_string(this->utc->tm_year+1900) + '-' + to_string(this->utc->tm_mon+1) + '-' + to_string(this->utc->tm_mday) + ' ' + to_string(this->utc->tm_hour) + ':' + to_string(this->utc->tm_min) + ':' + to_string(this->utc->tm_sec) + "}";
+    temp += "] }";
     return temp;
 };
 
