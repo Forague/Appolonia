@@ -1,2 +1,5 @@
 ./LOGS/*.log
 ./DRAWS/*.json
+./src/*.o
+main
+client
