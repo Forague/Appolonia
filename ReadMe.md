@@ -74,8 +74,8 @@ Attention, le timecode doit être rentré en secondes.
 # Détails du code
 
 Terminologie:
-- cDraw correspon à un seul tirage.
-- cDraws correspong à l'ensemble des tirages.
+- La classe cDraw correspond à un seul tirage.
+- La classe cDraws correspond à l'ensemble des tirages.
 
 Dès que l'objet cDraws est créé, l'application se lance. Deux threads sont aussi lancés en parallèles lors de la construction:
 - Le premier s'occupe de faire les tirages toutes les X secondes.
